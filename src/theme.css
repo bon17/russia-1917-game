@@ -1,0 +1,60 @@
+@import url('https://fonts.googleapis.com/css2?family=Jua&family=Gowun+Dodum&display=swap');
+
+@font-face {
+  font-family: 'Cafe24Simple';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_twelve@1.1/Cafe24Simplehae.woff') format('woff');
+  font-weight: normal;
+  font-display: swap;
+}
+
+:root {
+  --color-bg: #FFF9F5;
+  --color-surface: #FBE9DE;
+  --color-text: #452215;
+  --color-primary: #B45309;
+  --color-accent: #D97706;
+  --font-heading: 'Jua', sans-serif;
+  --font-body: 'Gowun Dodum', sans-serif;
+  --font-accent: 'Cafe24Simple', sans-serif;
+  font-family: var(--font-body);
+  color: var(--color-text);
+  background: var(--color-bg);
+  line-height: 1.72;
+}
+body { font-family: var(--font-body); line-height: 1.72; }
+h1, h2, h3 { font-family: var(--font-heading); font-weight: 400; }
+.accent, .eyebrow, .art-place, .badge strong { font-family: var(--font-accent); font-weight: 400; }
+.masthead a { font-family: var(--font-heading); font-weight: 400; color: var(--color-text); }
+.masthead, .gauges, footer { border-color: #E4C9B9; }
+.edition { border-color: #DDB99F; background: var(--color-surface); color: var(--color-text); }
+.eyebrow { color: var(--color-primary); }
+.intro-note { background: var(--color-surface); border-left-color: var(--color-accent); }
+.primary { background: var(--color-primary); color: white; }
+.primary:hover { background: #92400E; }
+button:focus-visible, a:focus-visible { outline-color: var(--color-primary); }
+.scope, .fine, .result .fine, .gauge-caption, .gauge-caption span, .gauge small, .scene-meta, footer { color: #79513E; }
+.track { background: #EBD7C7; }
+.track > div { background: var(--color-primary); }
+.life .track > div { background: #A65F3F; }
+.politics .track > div { background: #80584A; }
+.illustration { background: linear-gradient(155deg, #DBB58F, #89502F); color: #FFF9F5; }
+.art-1 { background: linear-gradient(150deg, #CCA785, #805744); }
+.art-2 { background: linear-gradient(150deg, #E1BB7B, #9A5A31); }
+.art-3 { background: linear-gradient(150deg, #D5AD95, #875440); }
+blockquote { background: var(--color-surface); border-left-color: var(--color-accent); }
+cite { color: #8B451E; }
+.choices button { background: #FFFFFF; color: var(--color-text); border-color: #E4C9B9; }
+.choices button:hover { background: var(--color-surface); border-color: var(--color-primary); }
+.choice-number { background: var(--color-surface); color: var(--color-primary); }
+.arrow { color: var(--color-primary); }
+.modal-backdrop { background: #452215A6; }
+.result { background: var(--color-bg); }
+.history, .timeline, .badge-collection > p { background: var(--color-surface); }
+.history small { color: #79513E; }
+.badge { background: #FFF0D3; border-color: #DFB777; }
+.badge > span { color: var(--color-accent); }
+.badge small { color: #79513E; }
+.up { background: #FBE1D5; color: #8F391C; }
+.down { background: #E6EDD8; color: #40562D; }
+.same { background: #EFE2D7; color: #694A36; }
+.timeline span { color: var(--color-primary); }
