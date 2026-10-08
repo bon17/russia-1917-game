@@ -4,10 +4,14 @@ import { readFile, writeFile } from 'node:fs/promises';
 // A classic inline script can also run when the HTML is opened as a local file.
 const result = await build({
   entryPoints: ['src/main.jsx'], bundle: true, write: false, minify: true,
-  format: 'iife', outfile: 'game.js', define: { 'process.env.NODE_ENV': '"production"' }
+  external: ['/assets/*'], format: 'iife', outfile: 'game.js', define: { 'process.env.NODE_ENV': '"production"' }
 });
 const js = result.outputFiles.find(file => file.path.endsWith('.js')).text;
-const theme = await readFile('src/theme.css', 'utf8');
+let theme = await readFile('src/theme.css', 'utf8');
+for (const name of ['russia-scenes-1-4.png', 'russia-scenes-5-8.png']) {
+  const artwork = await readFile('public/assets/backgrounds/' + name);
+  theme = theme.replaceAll('/assets/backgrounds/' + name, 'data:image/png;base64,' + artwork.toString('base64'));
+}
 // Font imports must precede all other CSS rules to work in an inline stylesheet.
 const imports = theme.match(/^@import[^;]+;/gm) || [];
 const css = imports.join('\n') + '\n' + await readFile('src/styles.css', 'utf8') + '\n' + theme.replace(/^@import[^;]+;/gm, '');

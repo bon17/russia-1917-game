@@ -58,3 +58,23 @@ cite { color: #8B451E; }
 .down { background: #E6EDD8; color: #40562D; }
 .same { background: #EFE2D7; color: #694A36; }
 .timeline span { color: var(--color-primary); }
+.ending-flow { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 22px 16px; margin-top: 22px; border-radius: 10px; background: var(--color-surface); text-align: center; }
+.ending-flow > span { color: var(--color-primary); }
+.ending-flow strong { font-weight: 600; }
+.historical-art { background-image: url('/assets/backgrounds/russia-scenes-1-4.png'); background-size: 200% 200%; background-repeat: no-repeat; aspect-ratio: 3 / 2; min-height: 0; align-self: start; }
+.historical-art.art-0 { background-position: left top; }
+.historical-art.art-1 { background-position: right top; }
+.historical-art.art-2 { background-position: left bottom; }
+.historical-art.art-3 { background-position: right bottom; }
+.art-caption { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, #452215C9); padding: 25px 16px 10px; color: white; font-family: var(--font-accent); text-shadow: 0 1px 2px #000; }
+
+.history-connection { font-weight: 700; margin-bottom: 8px; }
+
+.history-match { display: block; font-family: var(--font-heading); font-weight: 400; font-size: 1.2rem; color: var(--color-primary); margin-bottom: 8px; }
+
+.historical-art.art-4, .historical-art.art-5, .historical-art.art-6, .historical-art.art-7 { background-image: url('/assets/backgrounds/russia-scenes-5-8.png'); }
+.historical-art.art-4 { background-position: left top; }
+.historical-art.art-5 { background-position: right top; }
+.historical-art.art-6 { background-position: left bottom; }
+.historical-art.art-7 { background-position: right bottom; }
+.historical-art.art-8 { background-position: left top; }

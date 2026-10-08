@@ -2,40 +2,60 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { initialState, reducer, applyDelta } from './state.js';
 import { scenes } from '../data/scenes.js';
-test('all 180 choice combinations follow the fixed historical bridge and finish', () => {
+
+test('all 19440 paths preserve both revolutions and reach ungraded reflection', () => {
   let count = 0;
-  for (const a of scenes[0].choices) for (const b of scenes[1].choices) for (const c of scenes[2].choices) for (const d of scenes[3].choices) {
-    let state = reducer(initialState(), { type: 'START' });
-    for (const selected of [a,b,c]) {
-      state = reducer(state, { type: 'PICK', id: selected.id });
-      assert.equal(state.phase, 'result');
-      assert.equal(reducer(state, { type: 'PICK', id: selected.id }), state);
-      state = reducer(state, { type: 'CONTINUE' });
+  function walk(state, events = []) {
+    if (state.phase === 'end') {
+      assert.deepEqual(events, ['2월 혁명', '10월 혁명']);
+      assert.equal(state.choices.length, 8);
+      const reflection = reducer(state, { type: 'CONTINUE' });
+      for (const answer of [0,1,2]) {
+        const completed = reducer(reflection, { type: 'REFLECT', answer });
+        assert.equal(completed.phase, 'complete');
+        assert.equal(completed.reflectionAnswer, answer);
+        assert.deepEqual(completed.crisis, state.crisis);
+        assert.deepEqual(reducer(completed, { type: 'RESET' }), initialState());
+      }
+      assert.equal(state.badges.length, Number(state.choices.find(c => c.sceneId === 'scene-4').choiceId === 'join') + Number(state.choices.find(c => c.sceneId === 'scene-5').choiceId === 'continue-war'));
+      count++;
+      return;
     }
-    assert.equal(state.phase, 'bridge');
-    state = reducer(state, { type: 'CONTINUE' });
-    assert.equal(scenes[state.index].id, 'scene-5');
-    state = reducer(state, { type: 'PICK', id: d.id });
-    const beforeHistory = state.crisis;
-    state = reducer(state, { type: 'CONTINUE' });
-    assert.equal(state.phase, 'end');
-    assert.deepEqual(state.crisis, applyDelta(beforeHistory, scenes[3].historicalDelta));
-    assert.equal(state.choices.length, 4);
-    assert.equal(state.badges.length, d.id === 'continue-war' ? 1 : 0);
-    assert.deepEqual(reducer(state, { type: 'RESET' }), initialState());
-    count++;
+    const scene = scenes[state.index];
+    assert.deepEqual(state.crisis, scene.historicalCrisis);
+    if (scene.kind === 'history') {
+      const event = reducer(state, { type: 'CONTINUE' });
+      assert.equal(event.phase, 'event');
+      const next = reducer(event, { type: 'CONTINUE' });
+      assert.deepEqual(next.crisis, scenes[next.index].historicalCrisis);
+      walk(next, [...events, scene.event.title]);
+      return;
+    }
+    for (const choice of scene.choices) {
+      const result = reducer(state, { type: 'PICK', id: choice.id });
+      assert.equal(result.phase, 'result');
+      assert.deepEqual(result.crisis, state.crisis);
+      assert.deepEqual(result.result.after, applyDelta(state.crisis, choice.delta));
+      assert.equal(reducer(result, { type: 'PICK', id: choice.id }), result);
+      let next = reducer(result, { type: 'CONTINUE' });
+      let history = events;
+      if (scene.event) {
+        assert.equal(next.phase, 'event');
+        history = [...events, scene.event.title];
+        next = reducer(next, { type: 'CONTINUE' });
+      }
+      walk(next, history);
+    }
   }
-  assert.equal(count, 180);
+  walk(reducer(initialState(), { type: 'START' }));
+  assert.equal(count, 19440);
 });
-test('crisis stays within bounds without ending the game', () => {
+test('bounds never cause game over and invalid actions are ignored', () => {
   assert.deepEqual(applyDelta({ war: 99, life: 1, politics: 100 }, { war: 20, life: -20 }), { war: 100, life: 0, politics: 100 });
-  const state = { ...initialState(), phase: 'scene', crisis: { war: 100, life: 100, politics: 100 } };
+  const start = initialState();
+  assert.equal(reducer(start, { type: 'PICK', id: 'orders' }), start);
+  const state = { ...start, phase: 'scene', crisis: { war: 100, life: 100, politics: 100 } };
   assert.equal(reducer(state, { type: 'PICK', id: 'orders' }).phase, 'result');
-});
-test('invalid and out-of-phase actions do not change state', () => {
-  const state = initialState();
-  assert.equal(reducer(state, { type: 'PICK', id: 'orders' }), state);
   assert.equal(reducer(state, { type: 'CONTINUE' }), state);
-  const started = reducer(state, { type: 'START' });
-  assert.equal(reducer(started, { type: 'PICK', id: 'missing' }), started);
+  assert.equal(reducer(state, { type: 'PICK', id: 'missing' }), state);
 });
