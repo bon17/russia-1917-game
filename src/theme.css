@@ -71,6 +71,11 @@ cite { color: #8B451E; }
 .history-connection { font-weight: 700; margin-bottom: 8px; }
 
 .history-match { display: block; font-family: var(--font-heading); font-weight: 400; font-size: 1.2rem; color: var(--color-primary); margin-bottom: 8px; }
+.completion-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 25px; }
+.ending .completion-actions .primary { margin-top: 0; }
+.next-game { text-decoration: none; }
+.completion-actions .replay { background: var(--color-surface); color: var(--color-text); border: 1px solid #DDB99F; }
+.completion-actions .replay:hover { background: #F3DBCA; }
 
 .historical-art.art-4, .historical-art.art-5, .historical-art.art-6, .historical-art.art-7 { background-image: url('/assets/backgrounds/russia-scenes-5-8.png'); }
 .historical-art.art-4 { background-position: left top; }
